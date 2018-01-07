@@ -71,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void compute() {
         this.duration = new Duration(this.inTime, this.outTime);
-        if (duration.isOk()) {
             durationText.setText(duration.format());
-        }
     }
 
     public void onAccept(View view) {
@@ -87,22 +85,5 @@ public class MainActivity extends AppCompatActivity {
 
         //this.duration = null ;
         Toast.makeText(this, "Duration saved", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong("in", this.inTime.getTime());
-        Log.i("state", "saved");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(savedInstanceState.getLong("in"));
-        this.inTime = cal.getTime();
-        this.inEditText.setText(String.format("%tT", this.inTime));
-        Log.i("state", "restored");
     }
 }
