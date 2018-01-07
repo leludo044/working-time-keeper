@@ -3,63 +3,63 @@ package net.leludo.wtk;
 import java.util.Date;
 
 /**
- * A duration
+ * A period
  */
-class Duration {
+class Period {
 
     private Date start;
     private Date end;
 
-    /** Duration in seconds */
+    /** Period in seconds */
     private long duration ;
 
     /**
      * Constructor.
-     * Without any date, duration equals 0
+     * Without any date, period equals 0
      */
-    public Duration() {
+    public Period() {
         this.compute();
     }
 
     /**
      * Constructor.
-     * If start date is before end date, duration is computed else duration equals 0
+     * If start date is before end date, period is computed else period equals 0
      *
      * @param start Start date
      * @param end End date
      */
-    public Duration(Date start, Date end) {
+    public Period(Date start, Date end) {
         this.start = start ;
         this.end = end ;
         this.compute();
     }
 
     /**
-     * Fix duration start date.
+     * Fix period start date.
      * @param start Start date
-     * @return This duration
+     * @return This period
      */
-    public Duration start(Date start) {
+    public Period start(Date start) {
         this.start = start ;
         this.compute();
         return this ;
     }
 
     /**
-     * Fix duration end date.
+     * Fix period end date.
      * @param end End date
-     * @return This duration
+     * @return This period
      */
-    public Duration end(Date end) {
+    public Period end(Date end) {
         this.end = end ;
         this.compute();
         return this;
     }
 
     /**
-     * Compute the duration.
+     * Compute the period.
      * Il start date and end date are not null ans start date is before end date
-     * then duration is computed else duration equals 0
+     * then period is computed else period equals 0
      */
     protected void compute() {
         if (isOk()) {
@@ -69,8 +69,8 @@ class Duration {
         }
     }
     /**
-     * Return the duration in seconds
-     * @return Duration in seconds
+     * Return the period in seconds
+     * @return Period in seconds
      */
     public long duration() {
         return this.duration;
@@ -81,7 +81,7 @@ class Duration {
     }
 
     /**
-     * Format the duration : "hh:mm:ss"
+     * Format the period : "hh:mm:ss"
      * @return The format string
      */
     public String format() {

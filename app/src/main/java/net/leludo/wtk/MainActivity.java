@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     EditText inEditText;
     EditText outEditText;
     ListView durationList;
-    List<Duration> durations = new ArrayList<>();
-    Duration duration ;
+    List<Period> periods = new ArrayList<>();
+    Period period;
     VacationDatabase mDB;
 
     @Override
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         durationText = (TextView) findViewById(R.id.durationText);
         durationList = (ListView) findViewById(R.id.durationList);
-        //durations.add(new Duration());
-        durationList.setAdapter(new ArrayAdapter<Duration>(this, android.R.layout.simple_list_item_1, durations));
+        //periods.add(new Period());
+        durationList.setAdapter(new ArrayAdapter<Period>(this, android.R.layout.simple_list_item_1, periods));
     }
 
     public void onClickClose(View view) {
@@ -73,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void compute() {
-        this.duration = new Duration(this.inTime, this.outTime);
-            durationText.setText(duration.format());
+        this.period = new Period(this.inTime, this.outTime);
+            durationText.setText(period.format());
     }
 
     public void onAccept(View view) {
-        //this.durations.add(this.duration) ;
-        //((ArrayAdapter<Duration>)this.durationList.getAdapter()).notifyDataSetChanged();
-        ((ArrayAdapter<Duration>)this.durationList.getAdapter()).add(this.duration);
+        //this.periods.add(this.period) ;
+        //((ArrayAdapter<Period>)this.durationList.getAdapter()).notifyDataSetChanged();
+        ((ArrayAdapter<Period>)this.durationList.getAdapter()).add(this.period);
 
         mDB.create(this.inTime, this.outTime);
 
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         this.inTime = null ;
         this.outTime = null;
 
-        //this.duration = null ;
-        Toast.makeText(this, "Duration saved", Toast.LENGTH_SHORT).show();
+        //this.period = null ;
+        Toast.makeText(this, "Period saved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
