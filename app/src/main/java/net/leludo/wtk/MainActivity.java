@@ -82,8 +82,47 @@ public class MainActivity extends AppCompatActivity {
         this.inEditText.setText("");
         this.outEditText.setText("");
         this.durationText.setText("");
+        this.inTime = null ;
+        this.outTime = null;
 
         //this.duration = null ;
         Toast.makeText(this, "Duration saved", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (this.inTime != null) {
+            outState.putLong("in", this.inTime.getTime());
+        } else {
+            outState.putLong("in", 0L);
+        }
+        if (this.outTime != null) {
+            outState.putLong("out", this.outTime.getTime());
+        }
+        else {
+            outState.putLong("out", 0L);
+        }
+        Log.i("state", "saved");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Calendar cal = Calendar.getInstance();
+        long inTimeInMillis = savedInstanceState.getLong("in") ;
+        if (inTimeInMillis != 0L) {
+            cal.setTimeInMillis(inTimeInMillis);
+            this.inTime = cal.getTime();
+            this.inEditText.setText(String.format("%tT", this.inTime));
+        }
+        long outTimeInMillis = savedInstanceState.getLong("out") ;
+        if (outTimeInMillis != 0L) {
+            cal.setTimeInMillis(outTimeInMillis);
+            this.outTime = cal.getTime();
+            this.compute();
+            this.outEditText.setText(String.format("%tT", this.outTime));
+        }
+        Log.i("state", "restored");
     }
 }
