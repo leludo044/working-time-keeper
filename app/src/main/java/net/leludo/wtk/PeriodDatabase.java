@@ -11,20 +11,20 @@ import java.util.Date;
 /**
  * Created by Ludovic on 06/01/2018.
  */
-public class VacationDatabase extends SQLiteOpenHelper {
+public class PeriodDatabase extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "wtp.db";
-    private static final String TABLE_VACATION = "vacation";
+    private static final String TABLE_PERIOD = "period";
     private static final int DATABASE_VERSION = 1;
 
-    public VacationDatabase(Context context) {
+    public PeriodDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_VACATION +
-                "(intime date, outtime date);");
+        db.execSQL("create table " + TABLE_PERIOD +
+                "(start date, stop date);");
         Log.d("db", "Database created");
     }
 
@@ -36,8 +36,8 @@ public class VacationDatabase extends SQLiteOpenHelper {
     public long create(Date intime, Date outtime) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("intime", intime.getTime()) ;
-        values.put("outtime", outtime.getTime()) ;
-        return db.insert(TABLE_VACATION, null, values);
+        values.put("start", intime.getTime()) ;
+        values.put("stop", outtime.getTime()) ;
+        return db.insert(TABLE_PERIOD, null, values);
     }
 }

@@ -30,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
     ListView durationList;
     List<Period> periods = new ArrayList<>();
     Period period;
-    VacationDatabase mDB;
+    PeriodDatabase mDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDB = new VacationDatabase(this);
+        mDB = new PeriodDatabase(this);
 
         today = Calendar.getInstance().getTime();
         sdf = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
