@@ -30,11 +30,14 @@ public class MainActivity extends AppCompatActivity {
     ListView durationList;
     List<Duration> durations = new ArrayList<>();
     Duration duration ;
+    VacationDatabase mDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDB = new VacationDatabase(this);
 
         today = Calendar.getInstance().getTime();
         sdf = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
@@ -78,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         //this.durations.add(this.duration) ;
         //((ArrayAdapter<Duration>)this.durationList.getAdapter()).notifyDataSetChanged();
         ((ArrayAdapter<Duration>)this.durationList.getAdapter()).add(this.duration);
+
+        mDB.create(this.inTime, this.outTime);
 
         this.inEditText.setText("");
         this.outEditText.setText("");
