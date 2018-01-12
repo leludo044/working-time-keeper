@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("lifecylce", "onCreate");
         mDB = new PeriodDatabase(this);
 
         today = Calendar.getInstance().getTime();
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         durationList = (ListView) findViewById(R.id.durationList);
         //periods.add(new Period());
         durationList.setAdapter(new ArrayAdapter<Period>(this, android.R.layout.simple_list_item_1, periods));
+
+        List<Period> periods = mDB.find(this.today);
+        ((ArrayAdapter<Period>)this.durationList.getAdapter()).addAll(periods);
     }
 
     public void onClickClose(View view) {
