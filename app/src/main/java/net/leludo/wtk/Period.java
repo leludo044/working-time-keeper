@@ -94,6 +94,6 @@ class Period {
 
     @Override
     public String toString() {
-        return this.format();
+        return String.format("%tT / %tT = %s", this.start, this.end, this.format());
     }
 }
