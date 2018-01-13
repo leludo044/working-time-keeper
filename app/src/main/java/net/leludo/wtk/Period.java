@@ -11,7 +11,7 @@ class Period {
     private Date end;
 
     /** Period in seconds */
-    private long duration ;
+    private Duration duration ;
 
     /**
      * Constructor.
@@ -63,9 +63,9 @@ class Period {
      */
     protected void compute() {
         if (isOk()) {
-            this.duration = (this.end.getTime() - this.start.getTime()) / 1000;
+            this.duration = new Duration((this.end.getTime() - this.start.getTime()) / 1000);
         } else {
-            this.duration = 0;
+            this.duration = new Duration(0);
         }
     }
     /**
@@ -73,7 +73,7 @@ class Period {
      * @return Period in seconds
      */
     public long duration() {
-        return this.duration;
+        return this.duration.duration();
     }
 
     private boolean isOk() {
@@ -85,11 +85,7 @@ class Period {
      * @return The format string
      */
     public String format() {
-        long hours = this.duration/3600;
-        long minutes = (this.duration-(hours*3600))/60;
-        long seconds = (this.duration-(hours*3600)-(minutes*60));
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds) ;
+        return this.duration.format();
     }
 
     @Override
