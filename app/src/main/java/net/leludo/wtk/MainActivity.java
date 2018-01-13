@@ -25,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
     private Date today;
     SimpleDateFormat sdf;
     TextView durationText;
+    TextView durationOfTheDayText;
     EditText inEditText;
     EditText outEditText;
     ListView durationList;
     List<Period> periods = new ArrayList<>();
     Period period;
     PeriodDatabase mDB;
+    Duration dailyDuration ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +52,12 @@ public class MainActivity extends AppCompatActivity {
         this.outEditText = (EditText) findViewById(R.id.outTime);
 
         durationText = (TextView) findViewById(R.id.durationText);
+        durationOfTheDayText = (TextView) findViewById(R.id.durationOfTheDayText);
         durationList = (ListView) findViewById(R.id.durationList);
         //periods.add(new Period());
         durationList.setAdapter(new ArrayAdapter<Period>(this, android.R.layout.simple_list_item_1, periods));
 
-        List<Period> periods = mDB.find(this.today);
-        ((ArrayAdapter<Period>)this.durationList.getAdapter()).addAll(periods);
+        this.loadExistingPeriods();
     }
 
     public void onClickClose(View view) {
@@ -94,8 +96,25 @@ public class MainActivity extends AppCompatActivity {
         this.inTime = null ;
         this.outTime = null;
 
+        this.dailyDuration = new Duration(this.dailyDuration.duration()+this.period.duration());
+        this.durationOfTheDayText.setText(this.dailyDuration.format());
+
         //this.period = null ;
         Toast.makeText(this, "Period saved", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadExistingPeriods() {
+        List<Period> periods = mDB.find(this.today);
+        ((ArrayAdapter<Period>)this.durationList.getAdapter()).addAll(periods);
+
+        long sum = 0 ;
+        for (Period period: periods) {
+            sum += period.duration();
+        }
+
+        this.dailyDuration = new Duration(sum);
+        Log.d("sum", this.dailyDuration.format());
+        this.durationOfTheDayText.setText(this.dailyDuration.format());
     }
 
     @Override
