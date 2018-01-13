@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat sdf;
     TextView durationText;
     TextView durationOfTheDayText;
+    TextView todayText;
     EditText inEditText;
     EditText outEditText;
     ListView durationList;
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         today = Calendar.getInstance().getTime();
         sdf = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
 
-        TextView todayText = (TextView) findViewById(R.id.todayText);
-        todayText.setText(sdf.format(today));
+        this.todayText = (TextView) findViewById(R.id.todayText);
+        this.todayText.setText(sdf.format(today));
 
         this.inEditText = (EditText) findViewById(R.id.inTime);
         this.outEditText = (EditText) findViewById(R.id.outTime);
@@ -103,8 +104,39 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Period saved", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * On click the previous day button.
+     * This reloads the duration for this new day and display them
+     * @param view
+     */
+    public void onPreviousDay(View view) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.today);
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        this.today = cal.getTime();
+        this.todayText.setText(sdf.format(this.today));
+        this.loadExistingPeriods();
+
+    }
+
+    /**
+     * On click the next day button.
+     * This reloads the duration for this new day and display them
+     * @param view
+     */
+    public void onNextDay(View view) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.today);
+        cal.add(Calendar.DAY_OF_YEAR, 1);
+        this.today = cal.getTime();
+        this.todayText.setText(sdf.format(this.today));
+        this.loadExistingPeriods();
+
+    }
+
     private void loadExistingPeriods() {
         List<Period> periods = mDB.find(this.today);
+        ((ArrayAdapter<Period>)this.durationList.getAdapter()).clear();
         ((ArrayAdapter<Period>)this.durationList.getAdapter()).addAll(periods);
 
         long sum = 0 ;
