@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("lifecylce", "onCreate");
+        Log.d("lifecycle", "onCreate");
         mDB = new PeriodDatabase(this);
 
         today = Calendar.getInstance().getTime();
