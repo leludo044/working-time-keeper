@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         durationOfTheDayText = (TextView) findViewById(R.id.durationOfTheDayText);
         durationList = (ListView) findViewById(R.id.durationList);
         //periods.add(new Period());
-        durationList.setAdapter(new ArrayAdapter<Period>(this, android.R.layout.simple_list_item_1, periods));
+        durationList.setAdapter(new PeriodAdapter(this, periods));
 
         this.loadExistingPeriods();
     }

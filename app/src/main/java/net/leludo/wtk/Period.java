@@ -1,6 +1,8 @@
 package net.leludo.wtk;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A period
@@ -86,6 +88,14 @@ class Period {
      */
     public String format() {
         return this.duration.format();
+    }
+
+    public String formatedStartTime() {
+        return String.format("%tT", this.start);
+    }
+
+    public String formatedEndTime() {
+        return String.format("%tT", this.end);
     }
 
     @Override
