@@ -1,5 +1,6 @@
 package net.leludo.wtk;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -59,6 +60,38 @@ public class MainActivity extends AppCompatActivity {
         durationList.setAdapter(new PeriodAdapter(this, periods));
 
         this.loadExistingPeriods();
+
+        Calendar cal = Calendar.getInstance();
+        SharedPreferences settings = getPreferences(MODE_PRIVATE);
+        long inTimeInMillis = settings.getLong("in", 0) ;
+        if (inTimeInMillis != 0L) {
+            cal.setTimeInMillis(inTimeInMillis);
+            this.inTime = cal.getTime();
+            this.inEditText.setText(String.format("%tT", this.inTime));
+        }
+        long outTimeInMillis = settings.getLong("out", 0) ;
+        if (outTimeInMillis != 0L) {
+            cal.setTimeInMillis(outTimeInMillis);
+            this.outTime = cal.getTime();
+            this.outEditText.setText(String.format("%tT", this.outTime));
+            compute();
+        }
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("lyfecycle", "onPause");
+
+        if (this.inTime != null ||this.outTime != null ) {
+            SharedPreferences settings = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("in", this.inTime!=null?this.inTime.getTime():0);
+            editor.putLong("out", this.outTime!=null?this.outTime.getTime():0);
+            editor.commit();
+        }
     }
 
     public void onClickClose(View view) {
@@ -70,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.inEditText.setText(String.format("%tT", this.inTime));
         this.outEditText.setText("");
+        durationText.setText("");
+
     }
 
     public void onOut(View view) {
@@ -149,40 +184,4 @@ public class MainActivity extends AppCompatActivity {
         this.durationOfTheDayText.setText(this.dailyDuration.format());
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (this.inTime != null) {
-            outState.putLong("in", this.inTime.getTime());
-        } else {
-            outState.putLong("in", 0L);
-        }
-        if (this.outTime != null) {
-            outState.putLong("out", this.outTime.getTime());
-        }
-        else {
-            outState.putLong("out", 0L);
-        }
-        Log.i("state", "saved");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Calendar cal = Calendar.getInstance();
-        long inTimeInMillis = savedInstanceState.getLong("in") ;
-        if (inTimeInMillis != 0L) {
-            cal.setTimeInMillis(inTimeInMillis);
-            this.inTime = cal.getTime();
-            this.inEditText.setText(String.format("%tT", this.inTime));
-        }
-        long outTimeInMillis = savedInstanceState.getLong("out") ;
-        if (outTimeInMillis != 0L) {
-            cal.setTimeInMillis(outTimeInMillis);
-            this.outTime = cal.getTime();
-            this.compute();
-            this.outEditText.setText(String.format("%tT", this.outTime));
-        }
-        Log.i("state", "restored");
-    }
 }
