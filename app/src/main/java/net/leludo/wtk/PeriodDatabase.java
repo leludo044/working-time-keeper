@@ -45,6 +45,13 @@ public class PeriodDatabase extends SQLiteOpenHelper {
         values.put("stop", outtime.getTime() / 1000);
         return db.insert(TABLE_PERIOD, null, values);
     }
+    public long create(Period period) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("start", period.getStart().getTime() / 1000);
+        values.put("stop", period.getEnd().getTime() / 1000);
+        return db.insert(TABLE_PERIOD, null, values);
+    }
 
     public List<Period> find(Date date) {
 
