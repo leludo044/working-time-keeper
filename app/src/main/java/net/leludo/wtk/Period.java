@@ -98,6 +98,14 @@ class Period {
         return String.format("%tT", this.end);
     }
 
+    public Date getStart() {
+        return start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
     @Override
     public String toString() {
         return String.format("%tT / %tT = %s", this.start, this.end, this.format());

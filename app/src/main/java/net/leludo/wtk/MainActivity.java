@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Date inTime;
-    private Date outTime;
     private Date today;
     SimpleDateFormat sdf;
     TextView durationText;
@@ -66,14 +64,14 @@ public class MainActivity extends AppCompatActivity {
         long inTimeInMillis = settings.getLong("in", 0) ;
         if (inTimeInMillis != 0L) {
             cal.setTimeInMillis(inTimeInMillis);
-            this.inTime = cal.getTime();
-            this.inEditText.setText(String.format("%tT", this.inTime));
+            this.period = new Period().start(cal.getTime());
+            this.inEditText.setText(this.period.formatedStartTime());
         }
         long outTimeInMillis = settings.getLong("out", 0) ;
         if (outTimeInMillis != 0L) {
             cal.setTimeInMillis(outTimeInMillis);
-            this.outTime = cal.getTime();
-            this.outEditText.setText(String.format("%tT", this.outTime));
+            this.period.end(cal.getTime());
+            this.outEditText.setText(this.period.formatedEndTime());
             compute();
         }
 
@@ -85,13 +83,14 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d("lyfecycle", "onPause");
 
-        if (this.inTime != null ||this.outTime != null ) {
+        if (this.period!= null) {
             SharedPreferences settings = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putLong("in", this.inTime!=null?this.inTime.getTime():0);
-            editor.putLong("out", this.outTime!=null?this.outTime.getTime():0);
+            editor.putLong("in", this.period.getStart()!=null?this.period.getStart().getTime():0);
+            editor.putLong("out", this.period.getEnd()!=null?this.period.getEnd().getTime():0);
             editor.commit();
         }
+
     }
 
     public void onClickClose(View view) {
@@ -99,24 +98,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onIn(View view) {
-        this.inTime = Calendar.getInstance().getTime();
+        this.period = new Period().start(Calendar.getInstance().getTime());
 
-        this.inEditText.setText(String.format("%tT", this.inTime));
+        this.inEditText.setText(this.period.formatedStartTime());
         this.outEditText.setText("");
         durationText.setText("");
-
     }
 
     public void onOut(View view) {
-        this.outTime = Calendar.getInstance().getTime();
+        this.period.end(Calendar.getInstance().getTime());
 
-        this.outEditText.setText(String.format("%tT", this.outTime));
+        this.outEditText.setText(this.period.formatedEndTime());
         this.compute();
     }
 
     private void compute() {
-        this.period = new Period(this.inTime, this.outTime);
-            durationText.setText(period.format());
+//        this.period = new Period(this.inTime, this.outTime);
+            durationText.setText(this.period.format());
     }
 
     public void onAccept(View view) {
@@ -124,13 +122,11 @@ public class MainActivity extends AppCompatActivity {
         //((ArrayAdapter<Period>)this.durationList.getAdapter()).notifyDataSetChanged();
         ((ArrayAdapter<Period>)this.durationList.getAdapter()).add(this.period);
 
-        mDB.create(this.inTime, this.outTime);
+        mDB.create(this.period);
 
         this.inEditText.setText("");
         this.outEditText.setText("");
         this.durationText.setText("");
-        this.inTime = null ;
-        this.outTime = null;
 
         this.dailyDuration = new Duration(this.dailyDuration.duration()+this.period.duration());
         this.durationOfTheDayText.setText(this.dailyDuration.format());
